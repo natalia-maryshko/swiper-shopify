@@ -1,0 +1,67 @@
+.js-product-swiper .swiper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+  cursor: grab;
+}
+
+.swiper-slide.is-hidden {
+  display: none;
+}
+
+.swiper {
+  padding-bottom: 0;
+}
+
+.swiper-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 999px;
+  opacity: 1;
+  transition: all 0.2s ease;
+}
+
+.swiper-pagination-bullet:hover {
+  transform: scale(1.2);
+}
+
+.swiper-pagination-bullet-active {
+  width: 24px;
+  background: #111;
+}
+
+@media (max-width: 767px) {
+  .swiper { height: 260px; }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .swiper { height: 340px; }
+}
+
+@media (min-width: 1024px) {
+  .swiper { height: 460px; }
+}

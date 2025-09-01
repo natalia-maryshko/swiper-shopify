@@ -1,0 +1,81 @@
+{%- comment -%}
+  Swiper-галерея: використовуємо всі image media.
+  Для фільтра: у alt кожного фото конвенція "color: red" / "color: blue" тощо.
+{%- endcomment -%}
+
+{%- liquid
+  assign color_option_name = ''
+  for opt in product.options_with_values
+    assign opt_lower = opt.name | downcase
+    if opt_lower == 'color' or opt_lower == 'colour' or opt_lower == 'колір' or opt_lower == 'цвет'
+      assign color_option_name = opt.name
+    endif
+  endfor
+  if color_option_name == '' and product.options_with_values.size > 0
+    assign color_option_name = product.options_with_values[0].name
+  endif
+-%}
+
+<div class="product-swiper js-product-swiper"
+     id="product-swiper-{{ section.id }}"
+     data-color-option-name="{{ color_option_name }}">
+  {%- comment -%} Swiper wrapper зверху лишаємо як є {%- endcomment -%}
+<div class="swiper">
+  <div class="swiper-wrapper">
+    {%- for media in product.media -%}
+      {%- if media.media_type == 'image' -%}
+        {%- assign image_obj = media.image | default: media.preview_image -%}
+        <div class="swiper-slide" data-alt="{{ image_obj.alt | escape }}">
+          {{ image_obj
+            | image_url: width: 1440
+            | image_tag:
+              loading: 'lazy',
+              sizes: '(min-width: 1024px) 800px, 100vw',
+              alt: image_obj.alt | escape
+          }}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- comment -%}
+      Fallback: якщо з якоїсь причини product.media порожній, виведемо product.images
+    {%- endcomment -%}
+    {%- if product.media.size == 0 and product.images.size > 0 -%}
+      {%- for image_obj in product.images -%}
+        <div class="swiper-slide" data-alt="{{ image_obj.alt | escape }}">
+          {{ image_obj
+            | image_url: width: 1440
+            | image_tag:
+              loading: 'lazy',
+              sizes: '(min-width: 1024px) 800px, 100vw',
+              alt: image_obj.alt | escape
+          }}
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+
+  {%- if section.settings.enable_pagination -%}
+    <div class="swiper-pagination"></div>
+  {%- endif -%}
+  {%- if section.settings.enable_navigation -%}
+    <div class="swiper-button-prev" aria-label="Previous"></div>
+    <div class="swiper-button-next" aria-label="Next"></div>
+  {%- endif -%}
+</div>
+
+
+  <script type="application/json" class="js-swiper-config">
+  {
+    "spaceBetween": {{ section.settings.space_between | default: 16 }},
+    "enableNavigation": {{ section.settings.enable_navigation | json }},
+    "enablePagination": {{ section.settings.enable_pagination | json }},
+    "colorOptionName": {{ color_option_name | json }},
+    "breakpoints": {
+      "0":    { "slidesPerView": {{ section.settings.mobile_slides_per_view  | default: 1 }}, "spaceBetween": {{ section.settings.space_between | default: 12 }} },
+      "768":  { "slidesPerView": {{ section.settings.tablet_slides_per_view  | default: 1 }}, "spaceBetween": {{ section.settings.space_between | default: 16 }} },
+      "1024": { "slidesPerView": {{ section.settings.desktop_slides_per_view | default: 1 }}, "spaceBetween": {{ section.settings.space_between | default: 20 }} }
+    }
+  }
+  </script>
+</div>

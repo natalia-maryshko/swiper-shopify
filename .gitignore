@@ -1,0 +1,15 @@
+.shopify
+
+.DS_Store
+Thumbs.db
+.vscode/
+*.log
+
+node_modules/
+dist/
+.cache/
+build/
+*.map
+
+config/settings_data.json
+extensions/*/dist
