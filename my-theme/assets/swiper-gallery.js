@@ -1,11 +1,5 @@
 (function () {
-  const norm = (s) => (s || "").toString().trim().toLowerCase();
-
-  function getCfg(root) {
-    const tag = root.querySelector(".js-swiper-config");
-    if (!tag) return {};
-    try { return JSON.parse(tag.textContent || "{}"); } catch { return {}; }
-  }
+  const norm = (str) => (str || "").toString().trim().toLowerCase();
 
   function extractColorFromAlt(alt) {
     const m = norm(alt).match(/color\s*:\s*([^\|,;\/]+)/i);
@@ -78,14 +72,13 @@
     if (root.__swiperInited) return;
     root.__swiperInited = true;
 
-    const cfg = getCfg(root);
     const swiperEl = root.querySelector(".swiper");
     if (!swiperEl) return;
 
     const swiper = new Swiper(swiperEl, {
-      spaceBetween: cfg.spaceBetween ?? 16,
-      slidesPerView: (cfg.breakpoints && cfg.breakpoints["0"]?.slidesPerView) || 1,
-      breakpoints: cfg.breakpoints || {},
+      spaceBetween: 16,
+      slidesPerView: 1,
+      breakpoints: {},
       observer: true,
       observeParents: true,
       observeSlideChildren: true,
@@ -95,16 +88,13 @@
       updateOnWindowResize: true,
       watchOverflow: false,
 
-      pagination: cfg.enablePagination
-        ? { el: root.querySelector(".swiper-pagination"), clickable: true }
-        : undefined,
-      navigation: cfg.enableNavigation
-        ? {
+      pagination: { el: root.querySelector(".swiper-pagination"), clickable: false },
+      navigation: {
             nextEl: root.querySelector(".swiper-button-next"),
             prevEl: root.querySelector(".swiper-button-prev"),
-          }
-        : undefined,
+          },
     });
+
 
     const slides = Array.from(root.querySelectorAll(".swiper-slide"));
     slides.forEach((slide) => {
